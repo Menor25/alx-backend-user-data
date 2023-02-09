@@ -11,12 +11,13 @@ from api.v1.auth.auth import Auth
 class BasicAuth(Auth):
     """Authenticate using Basic method."""
 
-    def extract_base64_authorization_header(self,
-                                            authorization_header: str) -> str:
+    def extract_base64_authorization_header(self, authorization_header: str) -> str:
         """Extracts base64 encoding from an authorization header."""
-        if authorization_header is None\
-                or type(authorization_header) != str\
-                or authorization_header[0:6] != "Basic ":
+        if (
+            authorization_header is None
+            or type(authorization_header) != str
+            or authorization_header[0:6] != "Basic "
+        ):
             return None
 
         return authorization_header[6:]
@@ -44,16 +45,12 @@ class BasicAuth(Auth):
     ) -> Tuple[str, str]:
         """Extracts user credidentials from base64 encoding."""
         dba_header = decoded_base64_authorization_header
-        if (
-            dba_header is None
-            or type(dba_header) != str
-            or ":" not in dba_header
-        ):
+        if dba_header is None or type(dba_header) != str or ":" not in dba_header:
             return (None, None)
 
         return (
             dba_header[: dba_header.index(":")],
-            dba_header[dba_header.index(":") + 1:],
+            dba_header[dba_header.index(":") + 1 :],
         )
 
     def user_object_from_credentials(
@@ -99,8 +96,7 @@ class BasicAuth(Auth):
         if user_cred is None:
             return None
 
-        user_obj = self.user_object_from_credentials(
-            user_cred[0], user_cred[1])
+        user_obj = self.user_object_from_credentials(user_cred[0], user_cred[1])
         if user_obj is None:
             return None
 
